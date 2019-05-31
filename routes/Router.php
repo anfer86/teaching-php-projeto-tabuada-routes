@@ -1,6 +1,7 @@
 <?php
 # More details about this class in the following link published by John O. Paul:
 # https://medium.com/the-andela-way/how-to-build-a-basic-server-side-routing-system-in-php-e52e613cf241
+# This class was modified by anfer86
 class Router
 {
   private $request;
@@ -61,6 +62,10 @@ class Router
     $methodDictionary = $this->{strtolower($this->request->requestMethod)};
     $formatedRoute = $this->formatRoute($this->request->requestUri);
         
+    /*
+    This modification was made by me, anfer86, to handle with
+    routes that not exist
+    */
     if (!in_array($formatedRoute, array_keys($methodDictionary) )){
       $this->defaultRequestHandler();
       return;
