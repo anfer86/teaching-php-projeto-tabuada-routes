@@ -1,0 +1,4 @@
+deny from all
+
+# 'deny from all' impede que o cliente
+# acesse arquivos desta pasta diretamente

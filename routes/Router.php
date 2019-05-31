@@ -1,5 +1,6 @@
 <?php
-
+# More details about this class in the following link published by John O. Paul:
+# https://medium.com/the-andela-way/how-to-build-a-basic-server-side-routing-system-in-php-e52e613cf241
 class Router
 {
   private $request;
@@ -15,14 +16,15 @@ class Router
 
   function __call($name, $args)
   {
+
     list($route, $method) = $args;
 
     if(!in_array(strtoupper($name), $this->supportedHttpMethods))
     {
       $this->invalidMethodHandler();
-    }
+    }    
 
-    $this->{strtolower($name)}[$this->formatRoute($route)] = $method;
+    $this->{strtolower($name)}[$this->formatRoute($route)] = $method;   
   }
 
   /**
@@ -30,7 +32,7 @@ class Router
    * @param route (string)
    */
   private function formatRoute($route)
-  {
+  {    
     $result = rtrim($route, '/');
     if ($result === '')
     {
@@ -54,12 +56,20 @@ class Router
    */
   function resolve()
   {    
-    $methodDictionary = $this->{strtolower($this->request->requestMethod)};    
-    $formatedRoute = $this->formatRoute($this->request->requestUri);
-    $method = $methodDictionary[$formatedRoute];
 
+
+    $methodDictionary = $this->{strtolower($this->request->requestMethod)};
+    $formatedRoute = $this->formatRoute($this->request->requestUri);
+        
+    if (!in_array($formatedRoute, array_keys($methodDictionary) )){
+      $this->defaultRequestHandler();
+      return;
+    }
+  
+    $method = $methodDictionary[$formatedRoute];
+    
     if(is_null($method))
-    {
+    {      
       $this->defaultRequestHandler();
       return;
     }
